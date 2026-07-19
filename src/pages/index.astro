@@ -1,0 +1,1121 @@
+---
+import HomeModeSwitch from "@components/control/HomeModeSwitch.astro";
+import {
+	academicProfile,
+	awards,
+	education,
+	experience,
+	invitedTalks,
+	news,
+	projects,
+	publications,
+} from "@/data/academic";
+
+const selectedPublications = publications
+	.filter((item) => item.selected)
+	.slice(0, 4);
+const paperList = publications;
+const currentYear = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="view-transition" content="same-origin" />
+		<meta
+			name="description"
+			content={`${academicProfile.name}'s academic homepage, research profile, publications, projects, education, and experience.`}
+		/>
+		<meta name="theme-color" content="#ffffff" />
+		<title>{academicProfile.name} | Academic Homepage</title>
+	</head>
+	<body>
+		<header class="site-header">
+			<nav class="site-nav" aria-label="Academic navigation">
+				<a class="site-brand" href="#about" aria-label="Back to profile">
+					<span class="brand-mark">JC</span>
+					<span>{academicProfile.name}</span>
+				</a>
+				<div class="nav-links">
+					<a href="#about">About</a>
+					<a href="#news">News</a>
+					<a href="#publications">Publications</a>
+					<a href="#projects">Projects</a>
+					<a href="#talks">Talks</a>
+					<a href="#awards">Awards</a>
+					<a href="#education">Education</a>
+					<a href="#experience">Experience</a>
+				</div>
+				<HomeModeSwitch mode="academic" />
+			</nav>
+		</header>
+
+		<main>
+			<section class="hero" id="about" aria-labelledby="profile-name">
+				<div class="hero-top">
+					<div class="hero-copy">
+						<h1 id="profile-name">
+							{academicProfile.name}
+							<span>{academicProfile.nameZh}</span>
+						</h1>
+						<p class="headline">{academicProfile.headline}</p>
+						<p class="location">⌖ {academicProfile.location}</p>
+						<div class="profile-links" aria-label="Profile links">
+							{
+								academicProfile.links.map((link) => (
+									<a
+										href={link.url}
+										target={link.url.startsWith("http") ? "_blank" : undefined}
+										rel={link.url.startsWith("http") ? "noreferrer" : undefined}
+									>
+										{link.label}
+									</a>
+								))
+							}
+						</div>
+					</div>
+
+					<img
+						class="profile-photo"
+						src={academicProfile.avatar}
+						alt={`${academicProfile.name} in Budapest`}
+						width="460"
+						height="460"
+						fetchpriority="high"
+						referrerpolicy="no-referrer"
+					/>
+				</div>
+
+				<div class="bio">
+					{academicProfile.bio.map((paragraph) => <p>{paragraph}</p>)}
+				</div>
+				<ul class="interest-list" aria-label="Research interests">
+					{academicProfile.interests.map((interest) => <li>{interest}</li>)}
+				</ul>
+			</section>
+
+			<section class="section" id="news">
+				<h2>News</h2>
+				<div class="news-box" tabindex="0" aria-label="Research news, scroll for more">
+					<ul>
+						{
+							news.map((item) => (
+								<li>
+									<time>{item.date}</time>
+									{item.url ? <a href={item.url}>{item.text}</a> : <span>{item.text}</span>}
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			</section>
+
+			<section class="section" id="publications">
+				<div class="section-title-row">
+					<div>
+						<h2>Publications</h2>
+						<p>Switch between selected cards and the complete paper list</p>
+					</div>
+					<div class="publication-view-switch" role="group" aria-label="Publication view">
+						<button type="button" data-publication-view="selected" aria-pressed="true">Selected Papers</button>
+						<button type="button" data-publication-view="all" aria-pressed="false">All Paper List</button>
+					</div>
+				</div>
+
+				<div class="publication-view selected-publication-grid" data-publication-panel="selected">
+					{
+						selectedPublications.map((publication) => (
+							<article class="publication-card">
+								<div class="publication-main">
+									<h3>{publication.title}</h3>
+									<p class="publication-venue">
+										<strong>{publication.venue} {publication.year}</strong>
+										{publication.highlights?.length && (
+											<span class="publication-highlights">
+												{publication.highlights.map((highlight, index) => (
+													<span class:list={["publication-highlight", { award: index > 0 }]}>
+														{index === 0 && <span aria-hidden="true"> · </span>}{highlight}
+													</span>
+												))}
+											</span>
+										)}
+									</p>
+									<p class="publication-authors">
+										{publication.authors.split(academicProfile.name).map((part, index) => (
+											<>
+												{index > 0 && <strong class="self-author">{academicProfile.name}</strong>}
+												{part}
+											</>
+										))}
+									</p>
+									<div class="resource-links">
+										{publication.links?.map((link) => (
+											<a href={link.url} target="_blank" rel="noreferrer">
+												{link.label}
+											</a>
+										))}
+										{!publication.links?.length && <span>Links coming soon</span>}
+									</div>
+								</div>
+							</article>
+						))
+					}
+				</div>
+
+				<div class="publication-view paper-list" data-publication-panel="all" hidden>
+					{
+						paperList.map((publication) => (
+							<article class="paper-list-item publication-card">
+								<div class="publication-main">
+									<h3>{publication.title}</h3>
+									<p class="publication-venue">
+										<strong>{publication.venue} {publication.year}</strong>
+										{publication.highlights?.length && (
+											<span class="publication-highlights">
+												{publication.highlights.map((highlight, index) => (
+													<span class:list={["publication-highlight", { award: index > 0 }]}>
+														{index === 0 && <span aria-hidden="true"> · </span>}{highlight}
+													</span>
+												))}
+											</span>
+										)}
+									</p>
+									<p class="publication-authors">
+										{publication.authors.split(academicProfile.name).map((part, index) => (
+											<>
+												{index > 0 && <strong class="self-author">{academicProfile.name}</strong>}
+												{part}
+											</>
+										))}
+									</p>
+									<div class="resource-links">
+										{publication.links?.map((link) => (
+											<a href={link.url} target="_blank" rel="noreferrer">
+												{link.label}
+											</a>
+										))}
+										{!publication.links?.length && <span>Links coming soon</span>}
+									</div>
+								</div>
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="section" id="projects">
+				<h2>Open-Source Projects</h2>
+				<div class="project-grid">
+					{
+						projects.map((project) => (
+							<article class="project-card">
+								{project.image && (
+									<a href={project.links[0]?.url} target="_blank" rel="noreferrer" class="project-visual-link">
+										<img
+											class="project-visual"
+											src={project.image}
+											alt={project.imageAlt ?? `${project.name} project visual`}
+											loading="lazy"
+											referrerpolicy="no-referrer"
+										/>
+									</a>
+								)}
+								<div class="project-body">
+									<div class="project-heading">
+										<h3>{project.name}</h3>
+										{project.starsBadge && (
+											<a href={project.links[0]?.url} target="_blank" rel="noreferrer" aria-label={`View ${project.name} stars on GitHub`}>
+												<img class="star-badge" src={project.starsBadge} alt={`${project.name} GitHub star count`} loading="lazy" />
+											</a>
+										)}
+									</div>
+									<p>{project.description}</p>
+									<ul>{project.tags.map((tag) => <li>{tag}</li>)}</ul>
+									<div class="resource-links">
+										{project.links.map((link) => (
+											<a href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
+										))}
+									</div>
+								</div>
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="section" id="talks">
+				<h2>Invited Talks</h2>
+				<div class="talk-list">
+					{
+						invitedTalks.map((talk) => (
+							<article class="talk-item">
+								<div>
+									<h3>
+										{talk.url ? <a href={talk.url} target="_blank" rel="noreferrer">{talk.event}</a> : talk.event}
+									</h3>
+									<p>{talk.description}</p>
+								</div>
+								<time>{talk.date}</time>
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="section" id="awards">
+				<h2>Awards</h2>
+				<ul class="award-list">
+					{
+						awards.map((award) => (
+							<li>
+								<span>{award.title}</span>
+								<time>{award.date}</time>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<section class="section" id="education">
+				<h2>Education</h2>
+				<div class="cv-list">
+					{
+							education.map((item) => (
+								<article class="cv-item">
+									{item.logo && (
+										<a class="cv-logo-link" href={item.url} target="_blank" rel="noreferrer" aria-label={`Visit ${item.organization}`}>
+											<img class="cv-logo" src={item.logo} alt={`${item.organization} logo`} loading="lazy" />
+										</a>
+									)}
+									<div class="cv-copy">
+										<h3>{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.organization}</a> : item.organization}</h3>
+										<p class="cv-role">{item.role}</p>
+									{item.description && <p class="cv-note">{item.description}</p>}
+								</div>
+								<time>{item.period}</time>
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="section" id="experience">
+				<h2>Experience</h2>
+				<div class="cv-list">
+					{
+							experience.map((item) => (
+								<article class="cv-item">
+									{item.logo && (
+										<a class="cv-logo-link" href={item.url} target="_blank" rel="noreferrer" aria-label={`Visit ${item.organization}`}>
+											<img class="cv-logo" src={item.logo} alt={`${item.organization} logo`} loading="lazy" />
+										</a>
+									)}
+									<div class="cv-copy">
+										<h3>{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.organization}</a> : item.organization}</h3>
+									<p class="cv-role">{item.role}</p>
+									{item.description && <p class="cv-note">{item.description}</p>}
+								</div>
+								<time>{item.period}</time>
+							</article>
+						))
+					}
+				</div>
+			</section>
+		</main>
+
+		<footer>
+			<p>© {currentYear} {academicProfile.name}. Built with Astro.</p>
+		</footer>
+
+		<script is:inline>
+			const publicationSection = document.querySelector("#publications");
+			if (publicationSection) {
+				const buttons = publicationSection.querySelectorAll("[data-publication-view]");
+				const panels = publicationSection.querySelectorAll("[data-publication-panel]");
+				const setPublicationView = (mode) => {
+					buttons.forEach((button) => {
+						button.setAttribute("aria-pressed", String(button.dataset.publicationView === mode));
+					});
+					panels.forEach((panel) => {
+						panel.hidden = panel.dataset.publicationPanel !== mode;
+					});
+					localStorage.setItem("academic-publication-view", mode);
+				};
+				buttons.forEach((button) => {
+					button.addEventListener("click", () => setPublicationView(button.dataset.publicationView));
+				});
+				const savedView = localStorage.getItem("academic-publication-view");
+				if (savedView === "all") setPublicationView("all");
+			}
+		</script>
+	</body>
+</html>
+
+<style is:global>
+	@view-transition {
+		navigation: auto;
+	}
+
+	:root {
+		--ink: #172033;
+		--muted: #667085;
+		--accent: #2358a7;
+		--accent-soft: #eff5ff;
+		--accent-border: #c9d9f3;
+		--line: #e5e9f0;
+		--card-bg: #ffffff;
+		font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+		color: var(--ink);
+		background: #ffffff;
+		font-synthesis: none;
+		scroll-behavior: smooth;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		margin: 0;
+		min-width: 320px;
+		background: #ffffff;
+		color: var(--ink);
+		font-size: 15px;
+		line-height: 1.62;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	a {
+		color: var(--accent);
+		text-decoration: none;
+	}
+
+	a:hover {
+		color: #bd6220;
+	}
+
+	button,
+	a {
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	a:focus-visible,
+	button:focus-visible,
+	.news-box:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+
+	h1,
+	h2,
+	h3 {
+		font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	}
+
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 30;
+		border-bottom: 1px solid rgb(23 32 51 / 8%);
+		background: rgb(255 255 255 / 88%);
+		backdrop-filter: blur(14px) saturate(160%);
+	}
+
+	.site-nav {
+		display: flex;
+		align-items: center;
+		gap: 0.8rem;
+		width: min(56rem, calc(100% - 2rem));
+		min-height: 3.75rem;
+		margin: 0 auto;
+	}
+
+	.site-brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		margin-right: auto;
+		color: var(--ink);
+		font-size: 0.92rem;
+		font-weight: 750;
+		white-space: nowrap;
+	}
+
+	.brand-mark {
+		display: grid;
+		place-items: center;
+		width: 1.85rem;
+		height: 1.85rem;
+		border-radius: 0.55rem;
+		background: var(--accent);
+		color: white;
+		font-size: 0.62rem;
+		letter-spacing: 0.04em;
+	}
+
+	.nav-links {
+		display: flex;
+		align-items: center;
+		gap: 0.1rem;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+
+	.nav-links::-webkit-scrollbar {
+		display: none;
+	}
+
+	.nav-links a {
+		padding: 0.35rem 0.52rem;
+		border-radius: 0.45rem;
+		color: var(--muted);
+		font-size: 0.76rem;
+		font-weight: 650;
+		white-space: nowrap;
+	}
+
+	.nav-links a:hover {
+		background: var(--accent-soft);
+		color: var(--accent);
+	}
+
+	main,
+	footer {
+		width: min(56rem, calc(100% - 2rem));
+		margin-inline: auto;
+	}
+
+	.hero {
+		padding: 2.35rem 0 1.4rem;
+	}
+
+	.hero-top {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 9.8rem;
+		gap: clamp(1.5rem, 5vw, 3.2rem);
+		align-items: center;
+	}
+
+	h1 {
+		margin: 0 0 0.35rem;
+		font-size: clamp(2.2rem, 5vw, 2.8rem);
+		font-weight: 760;
+		line-height: 1.05;
+		letter-spacing: -0.045em;
+	}
+
+	h1 span {
+		margin-left: 0.45rem;
+		color: #8a94a5;
+		font-size: 0.48em;
+		font-weight: 550;
+		letter-spacing: 0.02em;
+		white-space: nowrap;
+	}
+
+	.headline {
+		margin: 0;
+		color: #344054;
+		font-size: 1rem;
+		font-weight: 620;
+	}
+
+	.location {
+		margin: 0.15rem 0 0;
+		color: var(--muted);
+		font-size: 0.85rem;
+	}
+
+	.profile-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+		margin-top: 0.8rem;
+	}
+
+	.profile-links a,
+	.resource-links a {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25rem 0.68rem;
+		border: 1px solid var(--accent-border);
+		border-radius: 999px;
+		background: var(--accent-soft);
+		color: var(--accent);
+		font-size: 0.74rem;
+		font-weight: 680;
+		line-height: 1.35;
+	}
+
+	.profile-links a:hover,
+	.resource-links a:hover {
+		border-color: var(--accent);
+		background: var(--accent);
+		color: white;
+	}
+
+	.profile-photo {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 1;
+		object-fit: cover;
+		border: 1px solid var(--line);
+		border-radius: 1.1rem;
+		box-shadow: 0 14px 36px rgb(23 32 51 / 16%);
+	}
+
+	.bio {
+		max-width: 48rem;
+		margin-top: 1.25rem;
+		color: #3f4a5c;
+	}
+
+	.bio p {
+		margin: 0 0 0.55rem;
+	}
+
+	.interest-list,
+	.project-card ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+		padding: 0;
+		margin: 0.8rem 0 0;
+		list-style: none;
+	}
+
+	.interest-list li,
+	.project-card li {
+		padding: 0.18rem 0.55rem;
+		border-radius: 999px;
+		background: #f2f4f7;
+		color: #5c6678;
+		font-size: 0.7rem;
+		font-weight: 630;
+	}
+
+	.section {
+		scroll-margin-top: 4.4rem;
+		padding-top: 1.55rem;
+	}
+
+	.section h2 {
+		margin: 0 0 0.78rem;
+		padding-bottom: 0.38rem;
+		border-bottom: 1px solid var(--line);
+		font-size: 1.35rem;
+		font-weight: 740;
+		line-height: 1.2;
+		letter-spacing: -0.025em;
+	}
+
+	.news-box {
+		max-height: 10.8rem;
+		overflow-y: auto;
+		padding: 0.8rem 0.95rem;
+		border: 1px solid var(--line);
+		border-left: 3px solid var(--accent);
+		border-radius: 0.7rem;
+		background: linear-gradient(180deg, var(--accent-soft), white 70%);
+		overscroll-behavior: contain;
+		scrollbar-gutter: stable;
+	}
+
+	.news-box::-webkit-scrollbar {
+		width: 7px;
+	}
+
+	.news-box::-webkit-scrollbar-thumb {
+		border-radius: 999px;
+		background: var(--accent-border);
+	}
+
+	.news-box ul {
+		display: grid;
+		gap: 0.42rem;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.news-box li {
+		display: grid;
+		grid-template-columns: 5.2rem 1fr;
+		gap: 0.7rem;
+		font-size: 0.86rem;
+		line-height: 1.45;
+	}
+
+	.news-box time {
+		color: var(--muted);
+		font-size: 0.76rem;
+		font-weight: 700;
+	}
+
+	.section-title-row {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 0.85rem;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.section-title-row h2 {
+		margin-bottom: 0;
+		border: 0;
+	}
+
+	.section-title-row p {
+		margin: 0 0 0.45rem;
+		color: var(--muted);
+		font-size: 0.74rem;
+	}
+
+	.publication-view-switch {
+		display: inline-flex;
+		gap: 0.2rem;
+		margin-bottom: 0.45rem;
+		padding: 0.2rem;
+		border: 1px solid var(--line);
+		border-radius: 0.65rem;
+		background: #f2f4f7;
+	}
+
+	.publication-view-switch button {
+		padding: 0.32rem 0.62rem;
+		border: 0;
+		border-radius: 0.48rem;
+		background: transparent;
+		color: var(--muted);
+		font: inherit;
+		font-size: 0.72rem;
+		font-weight: 680;
+		line-height: 1.35;
+		cursor: pointer;
+		transition: background 160ms ease, box-shadow 160ms ease, color 160ms ease;
+	}
+
+	.publication-view-switch button[aria-pressed="true"] {
+		background: white;
+		box-shadow: 0 1px 4px rgb(23 32 51 / 14%);
+		color: var(--accent);
+	}
+
+	.publication-view[hidden] {
+		display: none !important;
+	}
+
+	.selected-publication-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.75rem;
+	}
+
+	.publication-card {
+		min-width: 0;
+	}
+
+	.selected-publication-grid .publication-card {
+		display: flex;
+		flex-direction: column;
+		padding: 0.9rem;
+		border: 1px solid var(--line);
+		border-radius: 0.85rem;
+		background: var(--card-bg);
+		box-shadow: 0 8px 22px rgb(23 32 51 / 5%);
+		transition: transform 180ms ease, box-shadow 180ms ease;
+	}
+
+	.selected-publication-grid .publication-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 13px 28px rgb(23 32 51 / 10%);
+	}
+
+	.publication-card h3 {
+		margin: 0;
+		font-size: 0.94rem;
+		font-weight: 720;
+		line-height: 1.34;
+		letter-spacing: -0.01em;
+	}
+
+	.publication-venue {
+		margin: 0.35rem 0 0;
+		color: var(--accent);
+		font-size: 0.76rem;
+		font-weight: 780;
+		line-height: 1.45;
+	}
+
+	.publication-highlights {
+		margin-left: 0.18rem;
+		color: #c62127;
+		font-weight: 820;
+	}
+
+	.publication-highlight.award {
+		display: block;
+		margin-top: 0.08rem;
+		margin-left: 0;
+	}
+
+	.publication-authors {
+		margin: 0.42rem 0 0;
+		color: var(--muted);
+		font-size: 0.78rem;
+		line-height: 1.48;
+	}
+
+	.self-author {
+		color: #344054;
+		font-weight: 800;
+	}
+
+	.publication-main {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+	}
+
+	.resource-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.32rem;
+		margin-top: auto;
+		padding-top: 0.62rem;
+	}
+
+	.resource-links > span {
+		color: #98a2b3;
+		font-size: 0.7rem;
+		font-style: italic;
+	}
+
+	.paper-list {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.paper-list-item {
+		display: block;
+		padding: 0.8rem 0;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.paper-list-item:last-child {
+		border-bottom: 0;
+	}
+
+	.paper-list-item .resource-links {
+		margin-top: 0;
+		padding-top: 0.45rem;
+	}
+
+	.project-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.75rem;
+	}
+
+	.talk-list {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.talk-item {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 1rem;
+		padding: 0.7rem 0.15rem;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.talk-item:last-child {
+		border-bottom: 0;
+	}
+
+	.talk-item h3 {
+		margin: 0;
+		font-size: 0.92rem;
+		font-weight: 720;
+	}
+
+	.talk-item p {
+		margin: 0.18rem 0 0;
+		color: var(--muted);
+		font-size: 0.78rem;
+		line-height: 1.5;
+	}
+
+	.talk-item time {
+		color: var(--muted);
+		font-size: 0.74rem;
+		font-weight: 650;
+		white-space: nowrap;
+	}
+
+	.project-card {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		border: 1px solid var(--line);
+		border-radius: 0.85rem;
+		background: white;
+	}
+
+	.project-visual-link {
+		display: block;
+		padding: 0.6rem;
+		border-bottom: 1px solid var(--line);
+		background: #f8fafc;
+	}
+
+	.project-visual {
+		display: block;
+		width: 100%;
+		height: 8.8rem;
+		object-fit: contain;
+	}
+
+	.project-body {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		padding: 0.9rem 0.95rem 0.95rem;
+	}
+
+	.project-heading {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+	}
+
+	.project-heading > a {
+		display: inline-flex;
+		flex: 0 0 auto;
+	}
+
+	.star-badge {
+		display: block;
+		height: 1.25rem;
+		width: auto;
+	}
+
+	.project-card h3,
+	.cv-item h3 {
+		margin: 0;
+		font-size: 0.95rem;
+		font-weight: 720;
+		line-height: 1.35;
+	}
+
+	.project-body > p {
+		margin: 0.45rem 0 0;
+		color: var(--muted);
+		font-size: 0.8rem;
+		line-height: 1.52;
+	}
+
+	.award-list {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0 1.5rem;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.award-list li {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.8rem;
+		padding: 0.5rem 0;
+		border-bottom: 1px solid var(--line);
+		font-size: 0.8rem;
+	}
+
+	.award-list time,
+	.cv-item time {
+		flex: 0 0 auto;
+		color: var(--muted);
+		font-size: 0.74rem;
+		font-weight: 650;
+		white-space: nowrap;
+	}
+
+	.cv-list {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.cv-item {
+		display: grid;
+		grid-template-columns: 3rem minmax(0, 1fr) auto;
+		gap: 1rem;
+		align-items: start;
+		padding: 0.68rem 0.15rem;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.cv-item:last-child {
+		border-bottom: 0;
+	}
+
+	.cv-logo-link {
+		display: grid;
+		place-items: center;
+		width: 3rem;
+		height: 3rem;
+	}
+
+	.cv-logo {
+		display: block;
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+	}
+
+	.cv-item h3 a {
+		color: var(--ink);
+	}
+
+	.cv-item h3 a:hover {
+		color: var(--accent);
+	}
+
+	.cv-role,
+	.cv-note {
+		margin: 0.12rem 0 0;
+		color: var(--muted);
+		font-size: 0.78rem;
+		line-height: 1.48;
+	}
+
+	.cv-note {
+		font-size: 0.74rem;
+	}
+
+	footer {
+		display: flex;
+		justify-content: flex-start;
+		gap: 1rem;
+		margin-top: 2rem;
+		padding: 1rem 0 2rem;
+		border-top: 1px solid var(--line);
+		color: var(--muted);
+		font-size: 0.72rem;
+	}
+
+	footer p {
+		margin: 0;
+	}
+
+	@media (max-width: 56rem) {
+		.nav-links {
+			display: none;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.site-nav,
+		main,
+		footer {
+			width: min(100% - 1.25rem, 56rem);
+		}
+
+		.site-brand > span:last-child {
+			display: none;
+		}
+
+		.hero {
+			padding-top: 1.35rem;
+		}
+
+		.hero-top {
+			grid-template-columns: 1fr 6.6rem;
+			gap: 1rem;
+			align-items: start;
+		}
+
+		h1 {
+			font-size: clamp(1.9rem, 11vw, 2.4rem);
+		}
+
+		h1 span {
+			display: block;
+			margin: 0.3rem 0 0;
+			font-size: 0.45em;
+		}
+
+		.headline {
+			font-size: 0.86rem;
+		}
+
+		.bio {
+			font-size: 0.88rem;
+		}
+
+		.section-title-row {
+			align-items: flex-end;
+			flex-direction: column;
+		}
+
+		.publication-view-switch {
+			align-self: flex-start;
+		}
+
+		.section-title-row p {
+			display: none;
+		}
+
+		.selected-publication-grid,
+		.project-grid,
+		.award-list {
+			grid-template-columns: 1fr;
+		}
+
+		.news-box li {
+			grid-template-columns: 4.5rem 1fr;
+			gap: 0.5rem;
+		}
+
+		.cv-item {
+			grid-template-columns: 2.7rem minmax(0, 1fr);
+			gap: 0.35rem 0.75rem;
+		}
+
+		.cv-logo-link {
+			width: 2.7rem;
+			height: 2.7rem;
+		}
+
+		.cv-item time {
+			grid-column: 2;
+		}
+
+		.talk-item {
+			grid-template-columns: 1fr;
+			gap: 0.15rem;
+		}
+
+		footer {
+			flex-direction: column;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:root {
+			scroll-behavior: auto;
+		}
+
+		.publication-card {
+			transition: none !important;
+		}
+	}
+</style>

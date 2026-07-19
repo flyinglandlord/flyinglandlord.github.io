@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">原站图片未保存</title>
+  <desc id="desc">该图片没有包含在旧博客的静态文件中，因此无法迁移。</desc>
+  <rect width="1200" height="360" rx="32" fill="#f3f4f6"/>
+  <path d="M506 112h188a20 20 0 0 1 20 20v96a20 20 0 0 1-20 20H506a20 20 0 0 1-20-20v-96a20 20 0 0 1 20-20Z" fill="none" stroke="#9ca3af" stroke-width="8"/>
+  <circle cx="548" cy="154" r="16" fill="#9ca3af"/>
+  <path d="m510 222 52-48 42 36 35-28 51 40" fill="none" stroke="#9ca3af" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="600" y="304" text-anchor="middle" fill="#6b7280" font-family="system-ui, sans-serif" font-size="30">原站图片文件未保存</text>
+</svg>

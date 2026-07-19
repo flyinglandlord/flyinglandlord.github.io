@@ -1,0 +1,322 @@
+---
+import { steamProfile } from "@/data/steam";
+
+const formatHours = (hours: number) =>
+	new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 }).format(hours);
+---
+
+<section class="steam-section" aria-labelledby="steam-heading">
+	<div class="steam-title-row">
+		<div>
+			<h2 id="steam-heading">Steam 与游戏</h2>
+			<p>公开资料快照 · 常玩游戏与社区入口</p>
+		</div>
+		<span class="steam-wordmark" aria-hidden="true">STEAM</span>
+	</div>
+
+	<div class="steam-profile-card">
+		<div class="steam-profile-main">
+			<img
+				class="steam-avatar"
+				src={steamProfile.avatar}
+				alt={`${steamProfile.nickname} 的 Steam 头像`}
+				width="184"
+				height="184"
+				loading="lazy"
+			/>
+			<div class="steam-identity">
+				<div class="steam-name-line">
+					<h3>{steamProfile.nickname}</h3>
+					<span class="steam-status"><i></i>{steamProfile.status}</span>
+				</div>
+				<p class="steam-playing">Currently playing · {steamProfile.statusDetail}</p>
+				<p class="steam-meta">
+					SteamID64 {steamProfile.steamId64} · Member since {steamProfile.memberSince}
+				</p>
+			</div>
+		</div>
+
+		<nav class="steam-actions" aria-label="Steam links">
+			<a href={steamProfile.links.profile} target="_blank" rel="noreferrer">Profile</a>
+			<a href={steamProfile.links.games} target="_blank" rel="noreferrer">Game Library</a>
+			<a href={steamProfile.links.wishlist} target="_blank" rel="noreferrer">Wishlist</a>
+			<a href={steamProfile.links.inventory} target="_blank" rel="noreferrer">Inventory</a>
+			<a href={steamProfile.links.market} target="_blank" rel="noreferrer">Market</a>
+		</nav>
+	</div>
+
+	<div class="steam-games-heading">
+		<h3>Recently played & favorites</h3>
+		<span>Synced {steamProfile.lastSynced}</span>
+	</div>
+	<div class="steam-game-grid">
+		{
+			steamProfile.games.map((game) => (
+				<a
+					class="steam-game"
+					href={`https://store.steampowered.com/app/${game.appId}/`}
+					target="_blank"
+					rel="noreferrer"
+				>
+					<img src={game.image} alt={`${game.name} cover`} width="184" height="69" loading="lazy" />
+					<span class="steam-game-copy">
+						<strong>{game.name}</strong>
+						<small>{formatHours(game.hoursOnRecord)} hrs on record</small>
+					</span>
+				</a>
+			))
+		}
+	</div>
+	<p class="steam-privacy-note">
+		Only public Steam information is shown. Inventory visibility remains controlled by Steam privacy settings.
+	</p>
+</section>
+
+<style>
+	.steam-section {
+		margin-top: 2rem;
+		color: var(--tw-prose-body);
+	}
+
+	.steam-title-row,
+	.steam-name-line,
+	.steam-games-heading {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.steam-title-row {
+		margin-bottom: 0.8rem;
+		padding-bottom: 0.45rem;
+		border-bottom: 1px solid var(--line-divider);
+	}
+
+	.steam-title-row h2 {
+		margin: 0;
+		color: var(--tw-prose-headings);
+		font-size: 1.5rem;
+		font-weight: 700;
+		line-height: 1.35;
+	}
+
+	.steam-title-row p {
+		margin: 0.15rem 0 0;
+		font-size: 0.78rem;
+		opacity: 0.72;
+	}
+
+	.steam-wordmark {
+		padding: 0.26rem 0.58rem;
+		border: 1px solid rgb(102 192 244 / 38%);
+		border-radius: 999px;
+		background: rgb(27 40 56 / 92%);
+		color: #66c0f4;
+		font-size: 0.68rem;
+		font-weight: 800;
+		letter-spacing: 0.12em;
+	}
+
+	.steam-profile-card {
+		padding: 1rem;
+		border: 1px solid rgb(102 192 244 / 25%);
+		border-radius: var(--radius-large);
+		background:
+			radial-gradient(circle at 90% 10%, rgb(102 192 244 / 16%), transparent 35%),
+			linear-gradient(135deg, rgb(27 40 56 / 96%), rgb(23 26 33 / 96%));
+		box-shadow: 0 12px 30px rgb(15 23 42 / 14%);
+		color: #d6d7d8;
+	}
+
+	.steam-profile-main {
+		display: flex;
+		align-items: center;
+		gap: 0.9rem;
+	}
+
+	.steam-avatar {
+		width: 4.4rem;
+		height: 4.4rem;
+		margin: 0;
+		border: 2px solid #66c0f4;
+		border-radius: 0.55rem;
+		object-fit: cover;
+	}
+
+	.steam-identity {
+		min-width: 0;
+		flex: 1;
+	}
+
+	.steam-name-line {
+		justify-content: flex-start;
+		flex-wrap: wrap;
+		gap: 0.55rem;
+	}
+
+	.steam-name-line h3 {
+		margin: 0;
+		color: white;
+		font-size: 1.18rem;
+		font-weight: 700;
+	}
+
+	.steam-status {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		color: #90ba3c;
+		font-size: 0.72rem;
+		font-weight: 700;
+	}
+
+	.steam-status i {
+		display: block;
+		width: 0.45rem;
+		height: 0.45rem;
+		border-radius: 50%;
+		background: currentColor;
+		box-shadow: 0 0 0 3px rgb(144 186 60 / 16%);
+	}
+
+	.steam-playing,
+	.steam-meta {
+		margin: 0.18rem 0 0;
+		line-height: 1.45;
+	}
+
+	.steam-playing {
+		color: #90ba3c;
+		font-size: 0.82rem;
+	}
+
+	.steam-meta {
+		color: #8f98a0;
+		font-size: 0.7rem;
+	}
+
+	.steam-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.38rem;
+		margin-top: 0.9rem;
+	}
+
+	.steam-actions a {
+		padding: 0.3rem 0.62rem;
+		border: 1px solid rgb(102 192 244 / 28%);
+		border-radius: 999px;
+		background: rgb(102 192 244 / 9%);
+		color: #66c0f4;
+		font-size: 0.72rem;
+		font-weight: 650;
+		text-decoration: none;
+		transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+	}
+
+	.steam-actions a:hover {
+		background: #66c0f4;
+		color: #172331;
+		transform: translateY(-1px);
+	}
+
+	.steam-games-heading {
+		align-items: baseline;
+		margin: 1rem 0 0.55rem;
+	}
+
+	.steam-games-heading h3 {
+		margin: 0;
+		color: var(--tw-prose-headings);
+		font-size: 0.92rem;
+		font-weight: 700;
+	}
+
+	.steam-games-heading span {
+		font-size: 0.68rem;
+		opacity: 0.62;
+	}
+
+	.steam-game-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.55rem;
+	}
+
+	.steam-game {
+		display: grid;
+		grid-template-columns: 5.2rem minmax(0, 1fr);
+		gap: 0.65rem;
+		align-items: center;
+		overflow: hidden;
+		padding: 0.55rem;
+		border: 1px solid var(--line-divider);
+		border-radius: 0.75rem;
+		background: var(--license-block-bg);
+		color: var(--tw-prose-body);
+		text-decoration: none;
+		transition: border-color 160ms ease, transform 160ms ease, background 160ms ease;
+	}
+
+	.steam-game:hover {
+		border-color: rgb(102 192 244 / 65%);
+		background: var(--btn-regular-bg-hover);
+		transform: translateY(-1px);
+	}
+
+	.steam-game img {
+		display: block;
+		width: 5.2rem;
+		height: 2.05rem;
+		margin: 0;
+		border-radius: 0.35rem;
+		object-fit: cover;
+	}
+
+	.steam-game-copy {
+		display: flex;
+		min-width: 0;
+		flex-direction: column;
+	}
+
+	.steam-game-copy strong {
+		overflow: hidden;
+		color: var(--tw-prose-headings);
+		font-size: 0.78rem;
+		line-height: 1.35;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.steam-game-copy small {
+		margin-top: 0.08rem;
+		font-size: 0.68rem;
+		opacity: 0.68;
+	}
+
+	.steam-privacy-note {
+		margin: 0.65rem 0 0;
+		font-size: 0.68rem;
+		opacity: 0.62;
+	}
+
+	@media (max-width: 42rem) {
+		.steam-game-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.steam-profile-main {
+			align-items: flex-start;
+		}
+
+		.steam-avatar {
+			width: 3.7rem;
+			height: 3.7rem;
+		}
+
+		.steam-meta {
+			display: none;
+		}
+	}
+</style>
