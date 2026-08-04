@@ -15,6 +15,7 @@ export interface NewsItem {
 	date: string;
 	text: string;
 	url?: string;
+	linkText?: string;
 }
 
 export interface AwardItem {
@@ -36,8 +37,10 @@ export interface Publication {
 export interface TimelineEntry {
 	organization: string;
 	role: string;
+	roleHighlight?: string;
 	period: string;
 	description?: string;
+	details?: string[];
 	logo?: string;
 	url?: string;
 }
@@ -85,6 +88,12 @@ export const academicProfile = {
 
 export const news: NewsItem[] = [
 	{
+		date: "2026.07",
+		text: "📰 Our LightSpec was featured by Synced (机器之心) for its open-source dynamic MTP system!",
+		url: "https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651044774&idx=2&sn=bb39f6271766cdbd7fce0296c5424e8e",
+		linkText: "Synced (机器之心)",
+	},
+	{
 		date: "2026.06",
 		text: "🎉 Our SmartThinker has been accepted by ICML 2026!",
 	},
@@ -130,16 +139,6 @@ export const news: NewsItem[] = [
 export const publications: Publication[] = [
 	{
 		title:
-			"TokenFlow: Responsive LLM Text Streaming Serving under Request Burst via Preemptive Scheduling",
-		authors:
-			"Junyi Chen, Chuheng Du, Renyuan Liu, Shuochao Yao, Dingtian Yan, Jiang Liao, Shengzhong Liu, Fan Wu, Guihai Chen",
-		venue: "EuroSys",
-		year: "2026",
-		selected: true,
-		links: [{ label: "ArXiv", url: "https://arxiv.org/abs/2510.02758" }],
-	},
-	{
-		title:
 			"Pre³: Enabling Deterministic Pushdown Automata for Faster Structured LLM Generation",
 		authors:
 			"Junyi Chen, Shihao Bai, Zaijun Wang, Siyu Wu, Chuheng Du, Hailong Yang, Ruihao Gong, Shengzhong Liu, Fan Wu, Guihai Chen",
@@ -158,6 +157,41 @@ export const publications: Publication[] = [
 	},
 	{
 		title:
+			"TokenFlow: Responsive LLM Text Streaming Serving under Request Burst via Preemptive Scheduling",
+		authors:
+			"Junyi Chen, Chuheng Du, Renyuan Liu, Shuochao Yao, Dingtian Yan, Jiang Liao, Shengzhong Liu, Fan Wu, Guihai Chen",
+		venue: "EuroSys",
+		year: "2026",
+		selected: true,
+		links: [
+			{ label: "ArXiv", url: "https://arxiv.org/abs/2510.02758" },
+			{
+				label: "GitHub",
+				url: "https://github.com/SJTU-RTEAS/TokenFlow",
+			},
+		],
+	},
+	{
+		title:
+			"LightSpec: Resilient Speculative Decoding for Scalable LLM Serving via Dynamic Scheduling",
+		authors:
+			"Junyi Chen, Shihao Bai, Zaijun Wang, Huiyang Xu, Chenzhi Hu, Xintong Zhao, Zhou Ting, Hengsheng Lun, Ruihao Gong, Shengzhong Liu, Fan Wu, Guihai Chen",
+		venue: "Under Review · KDD",
+		year: "2027",
+		selected: true,
+		links: [
+			{
+				label: "GitHub",
+				url: "https://github.com/ModelTC/LightLLM/tree/mtp_optimization",
+			},
+			{
+				label: "Media Coverage",
+				url: "https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2651044774&idx=2&sn=bb39f6271766cdbd7fce0296c5424e8e",
+			},
+		],
+	},
+	{
+		title:
 			"C²KV: Compressed and Composable KV Cache Reuse for Efficient LLM Inference",
 		authors:
 			"Chuheng Du, Junyi Chen, Hanlin Tang, Kan Liu, Lan Tao, Lin Qu, Chaoyue Niu, Shengzhong Liu, Guihai Chen, Fan Wu",
@@ -165,7 +199,7 @@ export const publications: Publication[] = [
 		year: "2026",
 		selected: true,
 		links: [
-			{ label: "PDF", url: "/papers/c2kv-kdd-2026.pdf" },
+			{ label: "ArXiv", url: "https://arxiv.org/abs/2607.17715" },
 			{ label: "GitHub", url: "https://github.com/s7a9/C2KV" },
 		],
 	},
@@ -187,6 +221,15 @@ export const publications: Publication[] = [
 	},
 	{
 		title:
+			"ExFold: Unified Expert Folding for Training-Free MoE Prefill-Decode Acceleration",
+		authors:
+			"Juntong Wu, Yifei Liu, Junyi Chen, Siqi Fan, Chaoran Feng, Minghao Li, ZhangLiujie, Weihang Chen, Li Yuan",
+		venue: "Under Review · AAAI",
+		year: "2027",
+		selected: true,
+	},
+	{
+		title:
 			"StructureBench: A Unified Benchmark Suite for Multi-Scenario Structured Generation Tasks with On-Device Models",
 		authors:
 			"Xiaokun Xiong, Zhengjie Xu, Junyi Chen, Shihao Bai, Ruihao Gong, Xianglong Liu",
@@ -202,6 +245,10 @@ export const publications: Publication[] = [
 				label: "GitHub",
 				url: "https://github.com/Str-Ben/StructureBench",
 			},
+			{
+				label: "Project Page",
+				url: "https://str-ben.github.io/",
+			},
 		],
 	},
 	{
@@ -213,6 +260,15 @@ export const publications: Publication[] = [
 		year: "2026",
 		selected: false,
 		links: [{ label: "ArXiv", url: "https://arxiv.org/abs/2311.01759" }],
+	},
+	{
+		title:
+			"Maven: Fine-Grained Multimodal Alignment for Vehicle Sensing Under Spatiotemporal Mismatch",
+		authors:
+			"Bowen He, Chenzhi Hu, Yatong Chen, Weiguo Wang, Yuan Wang, Yao Yang, Bohong Xiao, Junyi Chen, Shengzhong Liu, Chaoyue Niu, Fan Wu, Guihai Chen",
+		venue: "Under Review · AAAI",
+		year: "2027",
+		selected: false,
 	},
 ];
 
@@ -308,11 +364,25 @@ export const education: TimelineEntry[] = [
 
 export const experience: TimelineEntry[] = [
 	{
+		organization: "Xiaohongshu (RED)",
+		role: "ACE Talent Program · Research Intern · RED AI-Infra Training Framework Team",
+		roleHighlight: "ACE Talent Program",
+		period: "Jul 2026 – Present",
+		details: [
+			"Contributing to the development and maintenance of Relax, an open-source LLM post-training framework.",
+			"Conducting research on LLM post-training.",
+		],
+		logo: "/images/academic/logos/xiaohongshu.jpg",
+		url: "https://www.xiaohongshu.com/",
+	},
+	{
 		organization: "SenseTime Research",
 		role: "Research Intern · Large Model Systems and Toolchain Team",
 		period: "Dec 2023 – Present",
-		description:
-			"Designed buffer-aware preemptive scheduling for responsive LLM serving, developed grammar-constrained structured decoding, and explored confidence-based dynamic speculative decoding for multi-token prediction.",
+		details: [
+			"Core contributor to the development and maintenance of LightLLM, a popular open-source LLM inference engine.",
+			"Conducting research on algorithms for accelerating LLM inference.",
+		],
 		logo: "/images/academic/logos/sensetime.png",
 		url: "https://www.sensetime.com/",
 	},

@@ -11,9 +11,7 @@ import {
 	publications,
 } from "@/data/academic";
 
-const selectedPublications = publications
-	.filter((item) => item.selected)
-	.slice(0, 4);
+const selectedPublications = publications.filter((item) => item.selected);
 const paperList = publications;
 const currentYear = new Date().getFullYear();
 ---
@@ -104,7 +102,20 @@ const currentYear = new Date().getFullYear();
 							news.map((item) => (
 								<li>
 									<time>{item.date}</time>
-									{item.url ? <a href={item.url}>{item.text}</a> : <span>{item.text}</span>}
+									{item.url && item.linkText ? (
+										<span>
+											{item.text.split(item.linkText).map((part, index) => (
+												<>
+													{index > 0 && <a href={item.url} target="_blank" rel="noreferrer">{item.linkText}</a>}
+													{part}
+												</>
+											))}
+										</span>
+									) : item.url ? (
+										<a href={item.url} target="_blank" rel="noreferrer">{item.text}</a>
+									) : (
+										<span>{item.text}</span>
+									)}
 								</li>
 							))
 						}
@@ -150,14 +161,15 @@ const currentYear = new Date().getFullYear();
 											</>
 										))}
 									</p>
-									<div class="resource-links">
-										{publication.links?.map((link) => (
-											<a href={link.url} target="_blank" rel="noreferrer">
-												{link.label}
-											</a>
-										))}
-										{!publication.links?.length && <span>Links coming soon</span>}
-									</div>
+									{publication.links?.length && (
+										<div class="resource-links">
+											{publication.links.map((link) => (
+												<a href={link.url} target="_blank" rel="noreferrer">
+													{link.label}
+												</a>
+											))}
+										</div>
+									)}
 								</div>
 							</article>
 						))
@@ -190,14 +202,15 @@ const currentYear = new Date().getFullYear();
 											</>
 										))}
 									</p>
-									<div class="resource-links">
-										{publication.links?.map((link) => (
-											<a href={link.url} target="_blank" rel="noreferrer">
-												{link.label}
-											</a>
-										))}
-										{!publication.links?.length && <span>Links coming soon</span>}
-									</div>
+									{publication.links?.length && (
+										<div class="resource-links">
+											{publication.links.map((link) => (
+												<a href={link.url} target="_blank" rel="noreferrer">
+													{link.label}
+												</a>
+											))}
+										</div>
+									)}
 								</div>
 							</article>
 						))
@@ -291,8 +304,20 @@ const currentYear = new Date().getFullYear();
 									)}
 									<div class="cv-copy">
 										<h3>{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.organization}</a> : item.organization}</h3>
-										<p class="cv-role">{item.role}</p>
-									{item.description && <p class="cv-note">{item.description}</p>}
+										<p class="cv-role">
+											{item.roleHighlight ? (
+												<>
+													<strong class="cv-role-highlight">{item.roleHighlight}</strong>
+													{item.role.slice(item.roleHighlight.length)}
+												</>
+											) : item.role}
+										</p>
+										{item.description && <p class="cv-note">{item.description}</p>}
+										{item.details?.length && (
+											<ul class="cv-details">
+												{item.details.map((detail) => <li>{detail}</li>)}
+											</ul>
+										)}
 								</div>
 								<time>{item.period}</time>
 							</article>
@@ -314,8 +339,20 @@ const currentYear = new Date().getFullYear();
 									)}
 									<div class="cv-copy">
 										<h3>{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.organization}</a> : item.organization}</h3>
-									<p class="cv-role">{item.role}</p>
+									<p class="cv-role">
+										{item.roleHighlight ? (
+											<>
+												<strong class="cv-role-highlight">{item.roleHighlight}</strong>
+												{item.role.slice(item.roleHighlight.length)}
+											</>
+										) : item.role}
+									</p>
 									{item.description && <p class="cv-note">{item.description}</p>}
+									{item.details?.length && (
+										<ul class="cv-details">
+											{item.details.map((detail) => <li>{detail}</li>)}
+										</ul>
+									)}
 								</div>
 								<time>{item.period}</time>
 							</article>
@@ -999,6 +1036,21 @@ const currentYear = new Date().getFullYear();
 
 	.cv-note {
 		font-size: 0.74rem;
+	}
+
+	.cv-details {
+		display: grid;
+		gap: 0.12rem;
+		padding-left: 1.05rem;
+		margin: 0.22rem 0 0;
+		color: var(--muted);
+		font-size: 0.74rem;
+		line-height: 1.48;
+	}
+
+	.cv-role-highlight {
+		color: var(--ink);
+		font-weight: 750;
 	}
 
 	footer {
