@@ -83,6 +83,7 @@ export const academicProfile = {
 	links: [
 		{ label: "Email", url: "mailto:junyi.chen@sjtu.edu.cn" },
 		{ label: "GitHub", url: "https://github.com/flyinglandlord" },
+		{ label: "Resume", url: "/resume.pdf" },
 	] satisfies AcademicLink[],
 };
 
