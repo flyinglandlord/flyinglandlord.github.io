@@ -65,8 +65,8 @@ const currentYear = new Date().getFullYear();
 								academicProfile.links.map((link) => (
 									<a
 										href={link.url}
-										target={link.url.startsWith("http") || link.url.endsWith(".pdf") ? "_blank" : undefined}
-										rel={link.url.startsWith("http") || link.url.endsWith(".pdf") ? "noreferrer" : undefined}
+										target={link.url.startsWith("http") ? "_blank" : undefined}
+										rel={link.url.startsWith("http") ? "noreferrer" : undefined}
 									>
 										{link.label}
 									</a>
